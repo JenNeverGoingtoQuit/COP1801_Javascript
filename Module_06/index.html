@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 6 Fictional Dogs</title>
+</head>
+<body>
+    <h1>Fictional Dogs in Animated Television</h1>
+
+    <p id="dogList"></p>
+    <p id="selectedDog"></p>
+    <p id="greeting"></p>
+    <p id="error"></p>
+
+    <script>
+        function Dog(name, breed, show, mySound, canTalk) {
+            this.name = name;
+            this.breed = breed;
+            this.show = show;
+            this.mySound = mySound;
+            this.canTalk = canTalk;
+
+            this.myGreeting = function () {
+                if (this.canTalk) {
+                    return "Hi, my name is " + this.name + ". I can talk!";
+                } else {
+                    return "Hi, my name is " + this.name + ". I cannot talk.";
+                }
+            };
+        }
+
+        const dog1 = new Dog("Snoopy", "Beagle", "Peanuts", "Woof", false);
+        const dog2 = new Dog("Scooby-Doo", "Great Dane", "Scooby-Doo, Where Are You!", "Ruh-roh", true);
+
+        const dogs = [dog1, dog2];
+
+        function renderDog(dog) {
+            let output = "";
+
+            for (let property in dog) {
+                if (dog.hasOwnProperty(property) && typeof dog[property] !== "function") {
+                    output += property + ": " + dog[property] + "<br>";
+                }
+            }
+
+            return output;
+        }
+
+        let allDogsOutput = "<strong>Available Dogs:</strong><br><br>";
+
+        for (let i = 0; i < dogs.length; i++) {
+            allDogsOutput += renderDog(dogs[i]) + "<br>";
+        }
+
+        document.getElementById("dogList").innerHTML = allDogsOutput;
+
+        const choice = prompt("Type one of these dog names: Snoopy or Scooby-Doo");
+        const normalized = (choice || "").trim().toLowerCase();
+
+        const selectedDog = dogs.find(function(dog) {
+            return dog.name.toLowerCase() === normalized;
+        });
+
+        if (selectedDog) {
+            document.getElementById("selectedDog").innerHTML =
+                "<strong>Selected Dog:</strong><br>" + renderDog(selectedDog);
+
+            document.getElementById("greeting").innerHTML =
+                "<strong>Greeting:</strong><br>" + selectedDog.myGreeting();
+
+            document.getElementById("error").innerHTML = "";
+        } else {
+            document.getElementById("selectedDog").innerHTML = "";
+            document.getElementById("greeting").innerHTML = "";
+            document.getElementById("error").innerHTML =
+                "Error: The dog you selected does not exist. Please refresh the page and try again.";
+        }
+    </script>
+</body>
+</html>
